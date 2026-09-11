@@ -431,6 +431,37 @@ p {
   color: var(--link);
 }
 
+.chapter-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chapter-list .chapter-pdf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  min-height: 24px;
+  padding: 3px 9px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid rgba(157, 59, 50, 0.22);
+  border-radius: 7px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
+.chapter-list .chapter-pdf:hover {
+  color: #ffffff;
+  background: var(--accent);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
 .chapter-list p {
   margin: 5px 0 0;
   color: #3e4146;
