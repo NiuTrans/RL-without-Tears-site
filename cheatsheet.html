@@ -26,8 +26,13 @@
     <main class="layout">
       <aside class="sidebar" aria-label="Cheat sheet navigation">
         <nav>
+          <a href="#lm-factorization">LM Factorization</a>
+          <a href="#pretraining">Pre-training</a>
+          <a href="#prompting">Prompting</a>
           <a href="#sft">SFT</a>
+          <a href="#inference">Inference</a>
           <a href="#llm-policy">LLM as Policy</a>
+          <a href="#mdp">MDP Objective</a>
           <a href="#policy-gradient">Policy Gradient</a>
           <a href="#value-return">Value / Return</a>
           <a href="#advantage">Advantage</a>
@@ -50,14 +55,95 @@
           <p class="kicker">Companion material</p>
           <h1>RL Formula Cheat Sheet</h1>
           <p>
-            A compact reference for the core formulas used in RL-based LLM post-training. The goal is not to replace
-            derivations, but to make the main objectives and estimators easy to locate.
+            A compact reference for the core formulas used in RL-based LLM post-training. It summarizes the main
+            objectives and estimators while leaving detailed derivations to the paper.
+          </p>
+        </section>
+
+        <section class="cheat-item" id="lm-factorization">
+          <p class="chapter-number">LLM foundation</p>
+          <h2>Autoregressive Factorization</h2>
+          <div class="equation">
+            \[
+              \mathrm{Pr}_{\theta}(\mathbf{z})
+              =
+              \prod_{i=1}^{N}\mathrm{Pr}_{\theta}(z_i\mid\mathbf{z}_{&lt;i}),
+              \qquad
+              \log \mathrm{Pr}_{\theta}(\mathbf{z})
+              =
+              \sum_{i=1}^{N}\log \mathrm{Pr}_{\theta}(z_i\mid\mathbf{z}_{&lt;i})
+            \]
+          </div>
+          <p class="notation-note">
+            Here, \(\mathbf{z}=z_1,\ldots,z_N\) is a token sequence and
+            \(\mathbf{z}_{&lt;i}=z_1,\ldots,z_{i-1}\). This left-to-right next-token view is the interface used for
+            training, prompting, inference, and RL optimization.
+          </p>
+        </section>
+
+        <section class="cheat-item" id="pretraining">
+          <p class="chapter-number">LLM foundation</p>
+          <h2>Pre-training Objective</h2>
+          <div class="equation">
+            \[
+              \hat{\theta}
+              =
+              \arg\max_{\theta}
+              \sum_{\mathbf{z}\in\mathcal{S}_{\mathrm{pre}}}
+              \sum_{i=1}^{N}
+              \log \mathrm{Pr}_{\theta}(z_i\mid\mathbf{z}_{&lt;i})
+            \]
+          </div>
+          <p class="notation-note">
+            \(\mathcal{S}_{\mathrm{pre}}\) is the pre-training corpus and \(\hat{\theta}\) denotes the optimized
+            pretrained parameters.
+          </p>
+          <p>
+            Pre-training teaches general language modeling from unlabeled text. Later stages adapt this base model
+            toward instruction following and reward-seeking behavior.
+          </p>
+        </section>
+
+        <section class="cheat-item" id="prompting">
+          <p class="chapter-number">Conditioned generation</p>
+          <h2>Prompt-conditioned Output Probability</h2>
+          <div class="equation">
+            \[
+              \mathrm{Pr}_{\theta}(\mathbf{y}\mid\mathbf{x})
+              =
+              \prod_{t=1}^{T}\mathrm{Pr}_{\theta}(y_t\mid\mathbf{x},\mathbf{y}_{&lt;t})
+            \]
+          </div>
+          <div class="equation">
+            \[
+              \log \mathrm{Pr}_{\theta}(\mathbf{y}\mid\mathbf{x})
+              =
+              \sum_{t=1}^{T}
+              \log \mathrm{Pr}_{\theta}(y_t\mid\mathbf{x},\mathbf{y}_{&lt;t})
+            \]
+          </div>
+          <p class="notation-note">
+            \(\mathbf{x}=x_1,\ldots,x_m\) is the prompt and \(\mathbf{y}_{&lt;t}\) is the generated prefix before
+            token \(y_t\).
+          </p>
+          <p>
+            Prompting changes the condition under which the same language-model distribution is used, without
+            changing model parameters.
           </p>
         </section>
 
         <section class="cheat-item" id="sft">
           <p class="chapter-number">Baseline</p>
           <h2>Supervised Fine-tuning</h2>
+          <div class="equation">
+            \[
+              \tilde{\theta}
+              =
+              \arg\max_{\hat{\theta}^{+}}
+              \sum_{(\mathbf{x},\mathbf{y})\in\mathcal{S}}
+              \log \mathrm{Pr}_{\hat{\theta}^{+}}(\mathbf{y}\mid\mathbf{x})
+            \]
+          </div>
           <div class="equation">
             \[
               \log \mathrm{Pr}_{\theta}(\mathbf{y}\mid \mathbf{x})
@@ -75,20 +161,105 @@
           </p>
         </section>
 
+        <section class="cheat-item" id="inference">
+          <p class="chapter-number">Autoregressive generation</p>
+          <h2>Common Decoding Rules</h2>
+          <p class="derivation-label">Greedy decoding</p>
+          <div class="equation">
+            \[
+              y_t^{\mathrm{greedy}}
+              =
+              \arg\max_{w\in\mathcal{V}}
+              \mathrm{Pr}_{\theta}(w\mid\mathbf{x},\mathbf{y}_{&lt;t})
+            \]
+          </div>
+          <p class="derivation-label">Beam search</p>
+          <div class="equation">
+            \[
+              s(\mathbf{y}_{\leq t})
+              =
+              s(\mathbf{y}_{&lt;t})
+              +
+              \log \mathrm{Pr}_{\theta}(y_t\mid\mathbf{x},\mathbf{y}_{&lt;t})
+            \]
+          </div>
+          <div class="equation">
+            \[
+              \mathcal{B}_t
+              =
+              \operatorname{TopB}
+              \left\{
+                (\mathbf{y}_{&lt;t},w):
+                \mathbf{y}_{&lt;t}\in\mathcal{B}_{t-1},
+                w\in\mathcal{V}
+              \right\}
+            \]
+          </div>
+          <p class="derivation-label">Sampling</p>
+          <div class="equation">
+            \[
+              y_t
+              \sim
+              \mathrm{Pr}_{\theta}(\cdot\mid\mathbf{x},\mathbf{y}_{&lt;t}),
+              \qquad
+              \mathrm{Pr}_{\theta}^{(T)}(w\mid\mathbf{x},\mathbf{y}_{&lt;t})
+              =
+              \frac{\exp(l_w/T)}{\sum_{v\in\mathcal{V}}\exp(l_v/T)}
+            \]
+          </div>
+          <p class="notation-note">
+            Greedy decoding takes the most likely token. Beam search keeps the top \(B\) candidate prefixes under the
+            accumulated sequence score. Sampling draws from the next-token distribution, often adjusted by
+            temperature \(T\), top-\(k\), or top-\(p\) filtering.
+          </p>
+          <p>
+            Sampling is especially important for RL because it mirrors stochastic policy sampling and produces
+            trajectories that can be scored by rewards.
+          </p>
+        </section>
+
         <section class="cheat-item" id="llm-policy">
           <p class="chapter-number">LLM-RL mapping</p>
           <h2>LLM as a Policy</h2>
           <div class="equation">
             \[
-              \pi(a\mid s)=\mathrm{Pr}(y_t\mid x,y_{&lt;t}),\qquad a=y_t,\quad s=(x,y_{&lt;t})
+              \pi_{\theta}(a_t\mid s_t)
+              =
+              \mathrm{Pr}_{\theta}(y_t\mid\mathbf{x},\mathbf{y}_{&lt;t}),
+              \qquad
+              a_t=y_t,\quad s_t=(\mathbf{x},\mathbf{y}_{&lt;t})
             \]
           </div>
           <p class="notation-note">
-            Here, \(s\) is the prompt plus generated prefix, and \(a\) is the next-token action selected by the LLM.
+            Here, \(s_t\) is the prompt plus generated prefix, and \(a_t\) is the next-token action selected by the LLM.
           </p>
           <p>
             This is the bridge between token generation and RL. The policy chooses the next token conditioned on the
             prompt and generated prefix.
+          </p>
+        </section>
+
+        <section class="cheat-item" id="mdp">
+          <p class="chapter-number">RL foundation</p>
+          <h2>MDP Policy Objective</h2>
+          <div class="equation">
+            \[
+              \pi^{*}
+              =
+              \arg\max_{\pi}
+              \mathbb{E}
+              \left[
+                \sum_{t=0}^{H-1}r_t
+                \mid \pi
+              \right]
+            \]
+          </div>
+          <p class="notation-note">
+            A trajectory is \(\tau=(s_0,a_0,s_1,a_1,\ldots,s_{H-1},a_{H-1})\), and \(H\) is the trajectory length.
+          </p>
+          <p>
+            In LLM RL, a trajectory may be a completion, reasoning trace, tool-use interaction, or multimodal
+            generation path.
           </p>
         </section>
 

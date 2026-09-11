@@ -286,8 +286,8 @@ h1 {
   max-width: 760px;
   margin: 18px 0 0;
   color: #303238;
-  font-size: clamp(1.12rem, 2vw, 1.48rem);
-  line-height: 1.48;
+  font-size: clamp(1.3rem, 2.35vw, 1.85rem);
+  line-height: 1.35;
 }
 
 .authors {
@@ -296,11 +296,18 @@ h1 {
   font-size: 0.98rem;
 }
 
+.affiliations {
+  margin: 8px 0 0;
+  color: #676a70;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
 .action-row {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 30px;
+  margin-top: 26px;
 }
 
 .action-row a {
@@ -573,6 +580,13 @@ code {
   scroll-margin-top: 82px;
 }
 
+.chapter h4 {
+  margin: 28px 0 10px;
+  color: #34363a;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
 .lesson-card,
 .callout,
 .recap-card {
@@ -798,6 +812,23 @@ code {
   font-weight: 740;
 }
 
+.rl-mapping-table {
+  table-layout: fixed;
+}
+
+.rl-mapping-table .rl-element-col {
+  width: 23%;
+}
+
+.rl-mapping-table .rl-interpretation-col {
+  width: 77%;
+}
+
+.rl-mapping-table th,
+.rl-mapping-table td {
+  vertical-align: top;
+}
+
 .table-scroll {
   width: 100%;
   margin: 18px 0 30px;
@@ -880,14 +911,6 @@ code {
   min-width: 0;
 }
 
-.rl-mapping-table .term-col {
-  width: 17%;
-}
-
-.rl-mapping-table .notation-col {
-  width: 20%;
-}
-
 .rl-mapping-table th:first-child,
 .rl-mapping-table td:first-child {
   white-space: nowrap;
@@ -896,7 +919,9 @@ code {
 .rl-mapping-table td:nth-child(2) {
   color: #22252a;
   font-size: 0.95rem;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .cheat-item,
