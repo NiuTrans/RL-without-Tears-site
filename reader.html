@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -232,6 +232,10 @@
             Here, \(\mathbf{z}_{&lt;i}=z_1,\ldots,z_{i-1}\) denotes the tokens before \(z_i\). Causal self-attention
             ensures that the prediction at each position only depends on previous tokens.
           </p>
+          <figure class="paper-figure">
+            <img src="assets/figures/fig-language-modeling-and-generation.png" alt="Diagram showing language model training and autoregressive generation">
+            <figcaption>Language model training and autoregressive generation.</figcaption>
+          </figure>
 
           <h4>Pre-training</h4>
           <p>
@@ -258,9 +262,9 @@
 
           <h4>Prompting</h4>
           <p>
-            Prompting adapts a pretrained model without changing its parameters. A prompt may contain an instruction,
-            user-provided content, formatting requirements, and demonstrations. The model then generates an output by
-            continuing the sequence under the conditional distribution induced by the prompt.
+            Prompting is a simple and lightweight way to adapt an LLM to different tasks without updating its
+            parameters. A prompt is the input text used to guide the model toward a desired task or output. It may
+            contain an instruction, user-provided content, output requirements, or demonstrations.
           </p>
           <aside class="callout">
             <strong>Prompt example.</strong>
@@ -268,24 +272,24 @@
             to improve my accuracy in solving math problems. Please make the response clear, practical, and easy to follow.
           </aside>
           <p>
-            Prompts can also be created from templates, such as replacing a <em>{subject}</em> placeholder with
-            "math", "English writing", or another topic. Adding demonstrations gives the model an in-context pattern
-            to imitate, which is commonly called in-context learning.
+            In this example, the input itself specifies the task, and the LLM generates the answer by continuing the
+            sequence. Prompts can also be constructed from templates, such as replacing a <em>{subject}</em>
+            placeholder with "math", "English writing", or another topic while keeping the main task description
+            unchanged.
           </p>
-          <div class="equation">
-            \[
-              \mathrm{Pr}_{\theta}(\mathbf{y}\mid\mathbf{x})
-              =
-              \prod_{t=1}^{T}\mathrm{Pr}_{\theta}(y_t\mid\mathbf{x},\mathbf{y}_{&lt;t}),
-              \qquad
-              \log \mathrm{Pr}_{\theta}(\mathbf{y}\mid\mathbf{x})
-              =
-              \sum_{t=1}^{T}\log \mathrm{Pr}_{\theta}(y_t\mid\mathbf{x},\mathbf{y}_{&lt;t})
-            \]
-          </div>
-          <p class="notation-note">
-            Here, \(\mathbf{x}=x_1,\ldots,x_m\) is the prompt, \(\mathbf{y}=y_1,\ldots,y_T\) is the generated
-            output, and \(\mathbf{y}_{&lt;t}=y_1,\ldots,y_{t-1}\) is the generated prefix.
+          <p>
+            Another important concept related to prompting is in-context learning. By adding demonstrations to the
+            context, we can let the model infer the desired input-output pattern from examples before responding to a
+            new input.
+          </p>
+          <p>
+            Prompting adapts an LLM by changing the context used for generation. Therefore, prompt quality can
+            strongly affect model performance. Even for the same task, we can write the prompt in many different
+            ways. For example, "Give me two tips to improve my English writing." can also be written as "What are two
+            simple ways to improve my English writing skills?". The two prompts express nearly the same intent, but
+            they may lead to noticeably different outputs. In practice, we often refine prompts through repeated trial
+            and error for a given LLM. More advanced methods automate this process and search for better prompts using
+            techniques such as RL or evolutionary algorithms.
           </p>
 
           <h4>Supervised Fine-Tuning</h4>
@@ -336,8 +340,22 @@
             \]
           </div>
           <p>
-            In practice, the input tokens are used as context and the loss is usually computed only on the output
-            tokens. The resulting SFT model is often the starting policy for later RL training.
+            Here, \(\mathcal{S}\) denotes the labeled data, \(\tilde{\theta}\) denotes the parameters optimized via
+            SFT, and \(\hat{\theta}^{+}\) represents an adjustment to the pretrained parameters \(\hat{\theta}\).
+            The fine-tuning starts from the pretrained parameters rather than randomly initialized ones.
+          </p>
+          <div class="equation">
+            \[
+              \log \mathrm{Pr}_{\theta}(\mathbf{y}\mid\mathbf{x})
+              =
+              \sum_{t=1}^{T}
+              \log \mathrm{Pr}_{\theta}(y_t\mid\mathbf{x},\mathbf{y}_{&lt;t})
+            \]
+          </div>
+          <p>
+            This formulation is equivalent to minimizing the cross-entropy loss over the output segment. In practice,
+            the input tokens are used as context and the loss is usually computed only on the output tokens. The
+            resulting SFT model is often the starting policy for later RL training.
           </p>
 
           <h4>Inference</h4>

@@ -106,29 +106,14 @@
 
         <section class="cheat-item" id="prompting">
           <p class="chapter-number">Conditioned generation</p>
-          <h2>Prompt-conditioned Output Probability</h2>
-          <div class="equation">
-            \[
-              \mathrm{Pr}_{\theta}(\mathbf{y}\mid\mathbf{x})
-              =
-              \prod_{t=1}^{T}\mathrm{Pr}_{\theta}(y_t\mid\mathbf{x},\mathbf{y}_{&lt;t})
-            \]
-          </div>
-          <div class="equation">
-            \[
-              \log \mathrm{Pr}_{\theta}(\mathbf{y}\mid\mathbf{x})
-              =
-              \sum_{t=1}^{T}
-              \log \mathrm{Pr}_{\theta}(y_t\mid\mathbf{x},\mathbf{y}_{&lt;t})
-            \]
-          </div>
-          <p class="notation-note">
-            \(\mathbf{x}=x_1,\ldots,x_m\) is the prompt and \(\mathbf{y}_{&lt;t}\) is the generated prefix before
-            token \(y_t\).
+          <h2>Prompting</h2>
+          <p>
+            Prompting adapts an LLM by changing the context used for generation, without updating model parameters.
+            A prompt may contain instructions, user-provided content, output requirements, or demonstrations.
           </p>
           <p>
-            Prompting changes the condition under which the same language-model distribution is used, without
-            changing model parameters.
+            Prompt quality can strongly affect model performance. Even prompts with nearly the same intent may lead
+            to different outputs, so prompts are often refined through trial and error or automated prompt search.
           </p>
         </section>
 
