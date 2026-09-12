@@ -1198,6 +1198,11 @@ code {
   white-space: nowrap;
 }
 
+.math-vector {
+  font-style: italic;
+  font-weight: 700;
+}
+
 .reading-note {
   margin: 8px 0 0;
   color: var(--faint);
