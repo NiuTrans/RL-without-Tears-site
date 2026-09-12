@@ -16,7 +16,7 @@
     <header class="topbar">
       <a class="brand" href="index.html">RL without Tears</a>
       <nav class="topnav" aria-label="Primary navigation">
-        <a href="reader.html">Introduction</a>
+        <a href="reader.html">Online Reader</a>
         <a href="cheatsheet.html">Cheat Sheet</a>
         <a href="glossary.html">Glossary</a>
         <a href="#chapters">Chapters</a>
@@ -63,15 +63,16 @@
         <section class="block" id="abstract">
           <h2>Abstract</h2>
           <p class="lead">
-            RL has become a practical language for modern LLM research: aligning models with
-            preferences, improving reasoning, training agents through interaction, and optimizing multimodal
-            systems. This introduction presents RL from the perspective of LLMs rather than robotics or classical
-            control, using prompts, tokens, rewards, verifiers, preference data, and trajectories as the central
-            objects.
+            RL has become a practical language for modern LLM research: aligning models with preferences,
+            strengthening reasoning, training agents through interaction, and optimizing multimodal systems. This
+            tutorial introduces RL from the perspective of LLMs, using prompts, tokens, rewards, verifiers,
+            preference data, and trajectories as the central objects.
           </p>
           <p>
-            This site provides a structured companion to the paper. It includes online chapters, formula notes, and
-            curated systems and datasets corresponding to the main discussion.
+            The reading path follows the paper's current logic: first establish the LLM and RL foundations, then
+            build a PPO-style RLHF workflow from a concrete LLM training example, then discuss improved rewards,
+            advantage estimation, efficient methods, DPO, and finally the extensions to reasoning, agents, and
+            multimodal models.
           </p>
         </section>
 
@@ -87,45 +88,45 @@
             </li>
             <li>
               <div class="chapter-title-row">
-                <a href="reader.html#preliminaries">Preliminaries: LLMs and RL</a>
+                <a href="reader.html#preliminaries">Preliminary: LLMs and RL</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-02-preliminary.pdf" aria-label="Download Chapter 2 PDF">PDF</a>
               </div>
-              <p>Maps agents, states, actions, policies, rewards, and trajectories to LLM training.</p>
+              <p>Reviews autoregressive LLMs, pre-training, prompting, SFT, inference, MDPs, and the mapping between LLM generation and RL.</p>
             </li>
             <li>
               <div class="chapter-title-row">
-                <a href="reader.html#rl-training">RL Training for LLMs</a>
+                <a href="reader.html#rl-training">Understanding RL in LLM Training</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-03-understanding-rl-in-llm-training.pdf" aria-label="Download Chapter 3 PDF">PDF</a>
               </div>
-              <p>Builds the path from policy gradient to advantage estimation, importance sampling, and PPO.</p>
+              <p>Uses a homework-assistant example to derive policy gradient, temporal decomposition, variance reduction, importance sampling, PPO, reward models, and the complete RLHF workflow.</p>
             </li>
             <li>
               <div class="chapter-title-row">
                 <a href="reader.html#improved-rl">Improved RL for LLMs</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-04-improved-rl-for-llms.pdf" aria-label="Download Chapter 4 PDF">PDF</a>
               </div>
-              <p>Explains advanced reward construction, advantage estimation, efficient RL methods, and direct preference optimization.</p>
+              <p>Addresses the main pressure points after basic PPO: reward quality, reward sparsity, reward generalization, advantage estimation, efficiency, and direct preference optimization.</p>
             </li>
             <li>
               <div class="chapter-title-row">
                 <a href="reader.html#reasoning">RL for Reasoning</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-05-rl-for-llm-reasoning.pdf" aria-label="Download Chapter 5 PDF">PDF</a>
               </div>
-              <p>Connects verifiers, process rewards, search, iterative RL, large-scale RL, and on-policy distillation.</p>
+              <p>Connects test-time scaling, process verification, MCTS, iterative RL, large-scale RL, and on-policy distillation for reasoning models.</p>
             </li>
             <li>
               <div class="chapter-title-row">
                 <a href="reader.html#agents">Agentic RL</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-06-agentic-rl.pdf" aria-label="Download Chapter 6 PDF">PDF</a>
               </div>
-              <p>Studies planning, tool use, environment design, credit assignment, memory, skills, and refinement.</p>
+              <p>Studies how RL helps LLM agents learn planning, tool use, environment interaction, credit assignment, memory, skills, and trajectory refinement.</p>
             </li>
             <li>
               <div class="chapter-title-row">
                 <a href="reader.html#multimodal">Multimodal RL</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-07-multimodal-rl.pdf" aria-label="Download Chapter 7 PDF">PDF</a>
               </div>
-              <p>Introduces visual reward models and RL for multimodal understanding and generation.</p>
+              <p>Introduces RL for multimodal understanding, visual reward models, diffusion generation, and flow matching generation.</p>
             </li>
             <li>
               <div class="chapter-title-row">
@@ -148,8 +149,8 @@
           <h2>Companion Materials</h2>
           <div class="material-grid">
             <a class="material" href="reader.html">
-              <span>Online Introduction</span>
-              <p>An expanded HTML reading path with section summaries, formulas, references, and selected figures from the paper.</p>
+              <span>Online Reader</span>
+              <p>A structured HTML reading path aligned with the tutorial's current chapter order, with summaries, formulas, references, and selected figures.</p>
             </a>
             <a class="material" href="cheatsheet.html">
               <span>Formula Cheat Sheet</span>

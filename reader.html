@@ -17,8 +17,8 @@
       <a class="brand" href="index.html">RL without Tears</a>
       <nav class="topnav" aria-label="Reader navigation">
         <a href="#introduction">Introduction</a>
-        <a href="#preliminaries">Preliminaries</a>
-        <a href="#rl-training">RL Training</a>
+        <a href="#preliminaries">Preliminary</a>
+        <a href="#rl-training">LLM Training</a>
         <a href="#improved-rl">Improved RL</a>
         <a href="#reasoning">Reasoning</a>
         <a href="#agents">Agents</a>
@@ -39,12 +39,12 @@
             <a class="nav-sub" href="#intro-roadmap">Roadmap</a>
           </details>
           <details>
-            <summary><a href="#preliminaries">2. Preliminaries</a></summary>
+            <summary><a href="#preliminaries">2. Preliminary</a></summary>
             <a class="nav-sub" href="#llm-fundamentals">2.1 LLM Fundamentals</a>
             <a class="nav-sub" href="#rl-fundamentals">2.2 RL Fundamentals</a>
           </details>
           <details>
-            <summary><a href="#rl-training">3. RL Training</a></summary>
+            <summary><a href="#rl-training">3. Understanding RL</a></summary>
             <a class="nav-sub" href="#policy-gradient">3.1 Policy Gradient</a>
             <a class="nav-sub" href="#temporal-decomposition">3.2 Temporal Decomposition</a>
             <a class="nav-sub" href="#variance-reduction">3.3 Variance Reduction</a>
@@ -72,7 +72,7 @@
             <a class="nav-sub" href="#agent-capabilities">6.1 Capabilities</a>
             <a class="nav-sub" href="#environment-design">6.2 Environments</a>
             <a class="nav-sub" href="#credit-assignment">6.3 Credit Assignment</a>
-            <a class="nav-sub" href="#agent-experience">6.4 Experience Learning</a>
+            <a class="nav-sub" href="#agent-experience">6.4 Learning from Experience</a>
           </details>
           <details>
             <summary><a href="#multimodal">7. Multimodal</a></summary>
@@ -94,8 +94,8 @@
 
       <article class="content reader-content">
         <section class="reader-title">
-          <p class="kicker">Online introduction</p>
-          <h1>RL without Tears,<br>An Online Introduction</h1>
+          <p class="kicker">Online reader</p>
+          <h1>RL without Tears,<br>An Online Reader</h1>
           <p>
             The online version follows the chapter structure of the paper and summarizes the main concepts,
             algorithms, and applications. The PDF remains the complete version for derivations, references, and
@@ -103,12 +103,12 @@
           </p>
           <div class="lesson-map" aria-label="Reading path">
             <a href="#introduction">1. Motivation</a>
-            <a href="#preliminaries">2. Map LLMs to RL</a>
-            <a href="#rl-training">3. Build PPO-style RLHF</a>
-            <a href="#improved-rl">4. Improve rewards and objectives</a>
-            <a href="#reasoning">5. Apply RL to reasoning</a>
-            <a href="#agents">6. Extend to agents</a>
-            <a href="#multimodal">7. Extend to multimodal models</a>
+            <a href="#preliminaries">2. Establish LLM/RL notation</a>
+            <a href="#rl-training">3. Derive RLHF from an LLM example</a>
+            <a href="#improved-rl">4. Improve rewards, advantages, efficiency, and DPO</a>
+            <a href="#reasoning">5. Scale reasoning with verifiers and RL</a>
+            <a href="#agents">6. Train interactive agents</a>
+            <a href="#multimodal">7. Move beyond text-only models</a>
             <a href="#conclusion">8. Future directions</a>
           </div>
         </section>
@@ -172,22 +172,24 @@
 
           <h3 id="intro-roadmap">Roadmap</h3>
           <p>
-            The introduction then sets the scope of the paper. It first builds RL fundamentals in LLM terminology,
-            then introduces policy-gradient training for LLMs. After that, it discusses improved reward modeling,
-            advantage estimation, training efficiency, and direct preference optimization. The later sections show
-            how the same RL framework extends to reasoning models, LLM-based agents, and multimodal models.
+            The introduction then sets the scope of the paper. The tutorial first builds LLM and RL fundamentals in
+            a shared notation. It then uses a concrete LLM training example to derive policy gradient, advantage
+            estimation, importance sampling, PPO, reward modeling, and the full RLHF workflow. After that, it
+            discusses improved reward modeling, better advantage estimation, efficient RL methods, and direct
+            preference optimization. The later sections show how the same framework extends to reasoning models,
+            LLM-based agents, and multimodal models.
           </p>
           <div class="step-flow compact-flow" aria-label="Paper roadmap">
-            <div><span>2</span><strong>Foundations</strong><p>Map RL concepts to LLM training.</p></div>
-            <div><span>3</span><strong>RLHF Loop</strong><p>Build policy-gradient and PPO-style optimization.</p></div>
-            <div><span>4</span><strong>Improvements</strong><p>Study rewards, advantages, efficiency, and DPO.</p></div>
-            <div><span>5-7</span><strong>Extensions</strong><p>Apply RL to reasoning, agents, and multimodal models.</p></div>
+            <div><span>2</span><strong>Foundations</strong><p>Review LLM generation, MDPs, and the LLM-as-policy mapping.</p></div>
+            <div><span>3</span><strong>Core RLHF</strong><p>Derive policy gradient, PPO, reward models, and the training workflow.</p></div>
+            <div><span>4</span><strong>Improvements</strong><p>Study rewards, advantages, efficiency, GRPO, and DPO.</p></div>
+            <div><span>5-7</span><strong>Applications</strong><p>Apply the framework to reasoning, agents, and multimodal models.</p></div>
           </div>
         </section>
 
         <section class="chapter" id="preliminaries">
           <p class="chapter-number">Section 2</p>
-          <h2>Preliminaries: LLMs and RL</h2>
+          <h2>Preliminary: LLMs and RL</h2>
           <p>
             The tutorial first builds a common language between LLMs and RL.
             LLMs generate text by making a sequence of next-token decisions, while RL studies how an agent improves
@@ -204,8 +206,9 @@
             <h3>Scope of This Section</h3>
             <ul>
               <li>LLM generation is an autoregressive next-token decision process.</li>
-              <li>Pre-training, prompting, and supervised fine-tuning provide the language-model foundation.</li>
-              <li>RL maps prompts, prefixes, tokens, rewards, values, and trajectories into one optimization view.</li>
+              <li>Pre-training, prompting, supervised fine-tuning, and inference define the LLM side of the notation.</li>
+              <li>MDPs, states, actions, policies, rewards, values, and trajectories define the RL side of the notation.</li>
+              <li>The bridge is simple: prompt plus prefix is the state, the next token is the action, and the complete output is a trajectory.</li>
             </ul>
           </aside>
 
@@ -272,16 +275,57 @@
             to improve my accuracy in solving math problems. Please make the response clear, practical, and easy to follow.
           </aside>
           <p>
-            In this example, the input itself specifies the task, and the LLM generates the answer by continuing the
-            sequence. Prompts can also be constructed from templates, such as replacing a <em>{subject}</em>
-            placeholder with "math", "English writing", or another topic while keeping the main task description
-            unchanged.
+            In this example, the prompt specifies both the task and the desired response style, and the LLM
+            generates the answer by continuing the input sequence. Prompts can also be written as templates. For the
+            same homework-assistant setting, we may keep the instruction fixed and replace only a task-specific
+            placeholder:
+          </p>
+          <aside class="callout">
+            <strong>Prompt template.</strong>
+            You are a homework assistant helping students improve their problem-solving skills. Give me three tips
+            to improve my accuracy in solving <em>{subject}</em> problems. Please make the response clear, practical,
+            and easy to follow.
+          </aside>
+          <p>
+            If <em>{subject}</em> is replaced by "math", the template becomes the prompt above. If it is replaced by
+            "English writing", the same instruction pattern is reused for a different task. This is why prompting is
+            often the first adaptation method tried before any parameter update.
           </p>
           <p>
             Another important concept related to prompting is in-context learning. By adding demonstrations to the
             context, we can let the model infer the desired input-output pattern from examples before responding to a
             new input.
           </p>
+          <aside class="callout">
+            <strong>In-context example.</strong><br>
+            <em>Input:</em> Give me two tips to improve my English writing.<br>
+            <em>Output:</em> 1. Read well-written essays regularly.<br>
+            2. Revise your sentences to make them clear.<br><br>
+            <em>Input:</em> Give me three tips to improve my accuracy in solving math problems.<br>
+            <em>Output:</em>
+          </aside>
+          <p>
+            When no demonstration is provided, the setting is usually called <em>zero-shot</em> prompting. When one
+            demonstration is included, it is called <em>one-shot</em> prompting. When several demonstrations are
+            included, it is called <em>few-shot</em> prompting. The key idea is that the model uses examples in the
+            current context to infer the expected input-output pattern without changing its parameters.
+          </p>
+          <p>
+            In-context learning can also be combined with chain-of-thought (CoT) prompting. CoT prompting encourages
+            the model to generate intermediate reasoning steps before giving the final answer. This can be done by
+            directly asking the model to reason step by step or by providing demonstrations that include both the
+            reasoning process and the answer.
+          </p>
+          <aside class="callout">
+            <strong>CoT example.</strong><br>
+            <em>Input:</em> A student solves 8 math problems and gets 6 correct. What is the accuracy? Please reason
+            step by step.<br>
+            <em>Output:</em> The student gets 6 out of 8 problems correct. The accuracy is therefore \(6/8=0.75\),
+            or 75%.<br><br>
+            <em>Input:</em> A student solves 20 math problems and gets 17 correct. What is the accuracy? Please
+            reason step by step.<br>
+            <em>Output:</em>
+          </aside>
           <p>
             Prompting adapts an LLM by changing the context used for generation. Therefore, prompt quality can
             strongly affect model performance. Even for the same task, we can write the prompt in many different
@@ -495,12 +539,18 @@
 
         <section class="chapter" id="rl-training">
           <p class="chapter-number">Section 3</p>
-          <h2>An Example of Using RL to Train LLMs</h2>
+          <h2>Understanding RL in LLM Training</h2>
           <p>
-            The third section introduces the main mechanics of RL-based LLM training through a concrete example. The
-            training process can be summarized as follows: sample outputs from the model, assign rewards to the
-            outputs, estimate which decisions are better than expected, and update the model so that better outputs
-            become more likely.
+            After Section 2 maps LLM generation into RL notation, Section 3 shows how the machinery works in an
+            actual LLM training setting. The running example is a homework assistant whose SFT response is correct
+            but too short. Instead of writing many new supervised demonstrations, the tutorial defines feedback over
+            generated outputs and uses RL to make preferred behavior more likely.
+          </p>
+          <p>
+            The section develops the workflow in the same order a reader would need it: start with policy gradient,
+            decompose a sequence-level reward over token decisions, reduce variance with baselines and advantages,
+            reuse sampled data through importance sampling, stabilize updates with PPO, then replace simple rewards
+            with learned reward models and assemble the full RLHF loop.
           </p>
           <div class="step-flow" aria-label="RLHF training loop">
             <div><span>1</span><strong>Sample</strong><p>Generate outputs from the policy.</p></div>
@@ -813,6 +863,12 @@
             pair to a scalar score. It is commonly trained from pairwise preference data, where a human or AI judge
             chooses the better response among two candidates <a class="citation" href="#ref-5">[5]</a>.
           </p>
+          <p>
+            The paper first describes several ways to collect feedback. Rating asks annotators to assign numerical
+            scores. Listwise ranking asks them to order a set of candidate outputs. Pairwise comparison asks them to
+            choose the better of two outputs for the same input. Pairwise comparison is widely used because it is
+            usually easier and more reliable than assigning absolute scores.
+          </p>
           <div class="equation">
             \[
               \mathcal{L}_{\mathrm{RM}}
@@ -834,6 +890,12 @@
             <img src="assets/figures/fig-rm-pairwise.png" alt="Diagram showing pairwise reward model loss with preferred and rejected outputs">
             <figcaption>Reward models learn to assign higher scores to preferred responses.</figcaption>
           </figure>
+          <p>
+            During policy optimization, the reward model usually scores a complete input-output pair independently.
+            This means the reward is often sparse: intermediate tokens receive no direct reward, and the final token
+            receives the reward model score. This limitation is one reason later sections discuss reward shaping,
+            process reward models, and step-level verification.
+          </p>
 
           <h3 id="complete-workflow">3.7 A Complete Workflow</h3>
           <p>
@@ -864,9 +926,9 @@
           <p class="chapter-number">Section 4</p>
           <h2>Improved RL for LLMs</h2>
           <p>
-            After introducing the basic RLHF workflow, the paper discusses recent improvements. These methods address
-            four main problems: how to construct better rewards, how to estimate advantages more effectively, how to
-            make RL training more efficient, and how to optimize directly from preferences.
+            Section 3 builds the basic PPO-style RLHF workflow. Section 4 then asks what must be improved before
+            that workflow becomes practical at modern LLM scale. The discussion is organized around four pressure
+            points: reward construction, advantage estimation, training efficiency, and direct preference learning.
           </p>
           <table class="concept-table">
             <thead>
@@ -890,21 +952,59 @@
             or vulnerable to exploitation, policy optimization may produce behavior that scores well without matching
             the true objective. Therefore, modern LLM RL places increasing emphasis on reward design.
           </p>
+
+          <h3 id="automatic-preference-data">4.1.1 Automatic Preference Data Generation</h3>
           <p>
-            Automatic preference data generation reduces the dependence on expensive human annotation. Stronger
-            models, rules, or verifiers can provide synthetic comparisons. This increases scale, but it also
-            introduces the risk that the reward inherits the judge's errors or preferences.
+            The first issue is data. Human preference labels are useful, but they are expensive and subjective. A
+            scalable alternative is to ask a strong model or verifier to compare candidate outputs. In the
+            homework-assistant example from the paper, the judge sees the input and two candidate answers, then
+            selects the one that is more informative, accurate, clear, and helpful.
           </p>
           <p>
-            Reward shaping adds intermediate signals to a delayed reward. For example, a system may reward valid
-            format, correct intermediate reasoning, or partial task completion. Shaping can provide denser learning
-            signals, but it must be aligned with the final goal. Otherwise the model may optimize the shaped signal rather
-            than the intended behavior.
+            This makes preference data easier to scale because the system can generate both outputs and labels.
+            However, the paper also stresses the risk: AI feedback can inherit position bias, judge-specific
+            preferences, and mistakes in the judging prompt. In practice, prompt design, demonstrations, diverse
+            candidate generation, and mixing human and AI feedback are used to improve the quality and diversity of
+            generated preference data.
+          </p>
+
+          <h3 id="reward-shaping-section">4.1.2 Reward Shaping</h3>
+          <p>
+            The second issue is sparsity. A standard reward model often gives only one score after the entire
+            response is generated. This delayed reward is difficult to assign back to individual token decisions,
+            especially for long reasoning traces or agent trajectories. Reward shaping addresses this by adding
+            intermediate rewards that make the learning signal denser.
           </p>
           <p>
-            Reward generalization is another central issue. A reward model trained on a limited distribution may
-            fail when the policy generates new kinds of outputs. Regularization, parameter freezing, ensemble
-            rewards, and data diversity are common methods for reducing reward overfitting.
+            For example, an LLM can receive a delayed reward from a reward model at the end of the answer, while
+            also receiving intermediate rewards for valid formatting, correct intermediate reasoning, or useful
+            partial progress. The paper connects this idea to potential-based shaping:
+          </p>
+          <div class="equation">
+            \[
+              r'_t=r_t+f(\mathbf{x},\mathbf{y}_{&lt;t},y_t),
+              \qquad
+              f=\gamma\Phi(\mathbf{x},\mathbf{y}_{&lt;t+1},y_{t+1})-\Phi(\mathbf{x},\mathbf{y}_{&lt;t},y_t)
+            \]
+          </div>
+          <p>
+            When the potential function is a value function, this form becomes closely related to advantage
+            estimation. The important caveat is that shaping rewards must remain aligned with the final objective.
+            Otherwise the model may optimize the intermediate signal instead of the behavior we actually want.
+          </p>
+
+          <h3 id="reward-generalization">4.1.3 Improved Reward Generalization</h3>
+          <p>
+            The third issue is generalization. During RL, the policy changes and begins to generate outputs that may
+            differ from the preference data used to train the reward model. A reward model that works well on a
+            static validation set may still fail when the policy learns to exploit its weaknesses.
+          </p>
+          <p>
+            This failure mode is often called reward hacking or overoptimization: the reward model score improves,
+            but the real quality of the model's behavior does not. The paper discusses several practical defenses.
+            Ensembles combine multiple reward models to reduce single-model errors. Parameter freezing and
+            regularization help preserve the general features of the underlying LLM. More diverse preference data
+            reduces the chance that the reward model only works on a narrow distribution.
           </p>
           <aside class="callout warning">
             <strong>Failure mode to watch.</strong>
@@ -981,11 +1081,48 @@
             less biased because they use observed returns, but they often have high variance. Temporal-difference
             methods reduce variance by bootstrapping from value estimates, but they may introduce bias.
           </p>
+
+          <h3 id="td-advantage">4.2.1 Temporal Difference-based Advantage Estimation</h3>
+          <p>
+            The basic Monte Carlo advantage in Section 3 uses the observed future return minus a value baseline.
+            This is intuitive, but long LLM outputs make the observed return noisy. Temporal-difference estimation
+            replaces a full future return with a one-step target: immediate reward plus the value of the next state.
+            This makes the estimate less noisy because it bootstraps from the value model instead of waiting for the
+            whole trajectory.
+          </p>
+          <div class="equation">
+            \[
+              \delta_t=r_t+\gamma V_{t+1}-V_t
+            \]
+          </div>
+          <p class="notation-note">
+            Here, \(\delta_t\) is the temporal-difference residual. It measures whether the observed transition was
+            better or worse than the value model expected.
+          </p>
+          <p>
+            The tradeoff is bias: if the value model is inaccurate, the bootstrapped target can be wrong. This is
+            why advantage estimation is usually presented as a bias-variance problem rather than a single best
+            formula.
+          </p>
+
+          <h3 id="gae-section">4.2.2 Generalized Advantage Estimation</h3>
           <p>
             Generalized advantage estimation combines these ideas through a tunable tradeoff. In LLM training, the
             problem is complicated by long sequences and delayed rewards. A separate critic can estimate token-level
             values, but training a reliable critic for language can be expensive and unstable
             <a class="citation" href="#ref-9">[9]</a>.
+          </p>
+          <div class="equation">
+            \[
+              A_t^{\mathrm{GAE}}
+              =
+              \delta_t+\gamma\lambda A_{t+1}^{\mathrm{GAE}}
+            \]
+          </div>
+          <p class="notation-note">
+            \(\lambda\) controls how much future temporal-difference information is mixed into the current
+            advantage. Smaller values rely more on short-horizon bootstrapping; larger values behave more like
+            Monte Carlo returns.
           </p>
 
           <h3 id="grpo-section">4.2.3 Group Relative Policy Optimization</h3>
@@ -1051,10 +1188,35 @@
             sampled outputs provide informative reward differences. Lightweight reward methods use rules,
             verifiers, or smaller models when full reward model inference is unnecessary.
           </p>
+
+          <h3 id="dynamic-sampling">4.3.1 Dynamic Sampling</h3>
+          <p>
+            Sampling is one of the main costs of RL for LLMs because the policy must autoregressively generate
+            outputs before they can be scored. Dynamic sampling asks whether every prompt really needs the same
+            amount of exploration. If the current policy already gives a high-reward answer to a prompt, further
+            sampling may be wasteful. If a prompt is too difficult and consistently receives very low rewards,
+            repeated exploration may also be inefficient.
+          </p>
+          <p>
+            A simple strategy is to first generate a greedy answer for each prompt and score it with the reward
+            model. Prompts above an upper threshold can be skipped because the model is already doing well; prompts
+            below a lower threshold can be deprioritized because they may be unlearnable at the current stage. RL
+            then focuses on prompts in the middle, where exploration is most likely to produce useful improvements.
+          </p>
+
+          <h3 id="lightweight-rewards">4.3.2 Lightweight Reward Methods</h3>
           <p>
             These methods are especially useful in math, coding, and tool-use tasks, where correctness can sometimes
             be checked automatically. When reliable rules exist, they can provide cheaper and more stable rewards
             than learned preference models.
+          </p>
+          <p>
+            Rule-based rewards are the clearest example. A math task can reward the correct final answer; a code
+            task can reward passing tests; a formatting task can reward valid JSON with required fields. These
+            rewards are fast and less vulnerable to reward-model miscalibration, but they only work when the desired
+            behavior can be described by reliable checks. For broader preference alignment, lightweight learned
+            reward models, distillation, pruning, or mixture-of-experts reward models can reduce cost while keeping
+            some flexibility.
           </p>
 
           <h3 id="dpo-section">4.4 Direct Preference Optimization</h3>
@@ -1080,10 +1242,17 @@
           <p class="chapter-number">Section 5</p>
           <h2>RL for LLM Reasoning</h2>
           <p>
-            Reasoning is a major application of RL for LLMs. Many reasoning tasks provide verifiable feedback: a
-            math answer can be checked, code can be executed against tests, and tool-integrated reasoning can be
-            evaluated through external results. These signals are often sparse, but they are more objective than
-            open-ended preference judgments <a class="citation" href="#ref-12">[12]</a>.
+            After the tutorial explains general RL training and its improvements, it turns to reasoning, where RL
+            has become especially influential. Many reasoning tasks provide verifiable feedback: a math answer can
+            be checked, code can be executed against tests, and tool-integrated reasoning can be evaluated through
+            external results. These signals are often sparse, but they are more objective than open-ended preference
+            judgments <a class="citation" href="#ref-12">[12]</a>.
+          </p>
+          <p>
+            The section first explains test-time scaling, where search and verification improve answers during
+            inference. It then shows how those feedback signals motivate iterative RL, large-scale RL, and
+            on-policy distillation, so that better reasoning becomes part of the model rather than only an
+            inference-time procedure.
           </p>
           <aside class="lesson-card">
             <h3>Reasoning RL Pattern</h3>
@@ -1100,14 +1269,26 @@
             strong one. Best-of-N sampling is a representative example. The model samples several responses, a reward model
             or verifier scores them, and the highest-scoring response is returned.
           </p>
+          <p>
+            This section starts with inference rather than training because reasoning quality often improves simply
+            by spending more computation at test time. A prompt such as "Let's think step by step" can encourage
+            longer reasoning, but it does not tell the model which reasoning path is actually better. Test-time
+            scaling adds a selection signal: generate alternatives, evaluate them, and keep the most promising one.
+          </p>
           <figure class="paper-figure">
             <img src="assets/figures/fig-bon.png" alt="Diagram showing Best-of-N sampling">
             <figcaption>Best-of-N sampling improves inference by selecting the best among multiple generated candidates.</figcaption>
           </figure>
           <p>
-            This method also motivates training. If a verifier can reliably identify better candidates at inference
-            time, then RL can use the same signal to make the model generate those candidates more often without
-            requiring large numbers of samples at test time.
+            In Best-of-N sampling, the candidates can be reranked by a reward model. If no reward model is
+            available, majority voting can be used when answers are easy to compare, such as math problems with a
+            final numeric result. The same idea can also be used for training through rejection sampling: sample
+            multiple answers, keep the best ones, and fine-tune the model on those selected outputs.
+          </p>
+          <p>
+            This creates the bridge to RL. If a verifier can reliably identify better candidates at inference time,
+            then the same signal can be used during training so that the model learns to generate strong reasoning
+            paths more often without relying on many samples at test time.
           </p>
 
           <h3 id="step-verification">5.1.2 Step-by-step Verification</h3>
@@ -1120,6 +1301,12 @@
             Process reward models can score partial solutions, while greedy or beam-style procedures can extend the
             most promising paths. This shifts reasoning from one-shot generation toward guided construction of a
             solution.
+          </p>
+          <p>
+            The key change is the granularity of feedback. Instead of scoring only the final answer, the verifier
+            scores each intermediate step or prefix. A path can then be abandoned early if its partial reasoning
+            becomes unpromising. The same process reward can later serve as a shaping reward during RL, giving the
+            model more informative feedback than a single outcome score.
           </p>
           <figure class="paper-figure">
             <img src="assets/figures/fig-step-verification.png" alt="Diagram showing step-by-step verification with greedy search">
@@ -1141,6 +1328,11 @@
             MCTS is useful when the model has enough local reasoning ability to propose candidate steps, but needs
             search to find a reliable global solution. The verifier or reward model guides the search toward paths
             with higher expected success.
+          </p>
+          <p>
+            In the tutorial's framing, MCTS also clarifies why reasoning resembles sequential decision-making. Each
+            reasoning step changes the state, future steps depend on earlier choices, and delayed rewards from a
+            simulated final answer can be propagated back to earlier partial states.
           </p>
           <table class="concept-table compact">
             <thead>
@@ -1173,6 +1365,13 @@
             this can hurt readability, rejection sampling and SFT are then used to refine outputs across multiple
             tasks. A final multi-task RL phase improves generalization with a broader reward model.
           </p>
+          <p>
+            The order matters. Reasoning-oriented RL is placed early because later rejection sampling needs a model
+            that can already explore meaningful reasoning trajectories. If this capability is missing, the sampled
+            candidates are weak and the later SFT phase has little useful material to select from. After reasoning
+            ability is strengthened, rejection sampling can improve readability, and multi-task RL can recover
+            broader instruction-following behavior.
+          </p>
 
           <h3 id="large-scale-rl">5.3 Large-scale RL</h3>
           <p>
@@ -1184,6 +1383,13 @@
             The central question is not only whether the model can find correct solutions, but whether RL can make
             the process of finding them part of the model's learned behavior. This is why reasoning RL has become a
             major direction in modern LLM research.
+          </p>
+          <p>
+            The section also highlights two practical challenges. First, large-scale RL needs highly reliable
+            rewards because the policy will actively search for behaviors that maximize them. Rule-based rewards are
+            attractive in math and code because answer verification is relatively stable. Second, the reference
+            model used to constrain policy drift can become too restrictive as the policy improves, so some methods
+            periodically refresh the reference or otherwise balance stability with adaptability.
           </p>
 
           <h3 id="opd-section">5.4 On-Policy Distillation</h3>
@@ -1201,15 +1407,27 @@
             paper's RL formulation, the negative KL divergence between teacher and student distributions can be treated as a
             token-level reward, giving denser feedback than outcome-only supervision.
           </p>
+          <p>
+            The distinction from ordinary distillation is important. Offline distillation trains the student on
+            trajectories produced by the teacher, which may not match the states the student actually visits during
+            its own generation. OPD instead lets the student generate first, then asks the teacher how to continue
+            from those student-visited prefixes. This makes the supervision denser and more relevant to the
+            student's real errors, at the cost of extra teacher forward passes during training.
+          </p>
         </section>
 
         <section class="chapter" id="agents">
           <p class="chapter-number">Section 6</p>
           <h2>Agentic RL</h2>
           <p>
-            Agentic RL extends LLM training from single responses to interactive behavior. An agent must observe the
-            environment, plan, act, call tools, receive feedback, and revise its behavior over multiple steps. This
-            makes the trajectory longer and the reward structure more complex.
+            Section 6 extends the same RL view from single generated answers to interactive agents. An agent must
+            observe the environment, plan, act, call tools, receive feedback, and revise its behavior over multiple
+            steps. This makes the trajectory longer and the reward structure more complex.
+          </p>
+          <p>
+            The chapter moves from capabilities to infrastructure to learning signals: first planning and tool use,
+            then environment design and scaling, then credit assignment, and finally learning from agentic
+            experience through memory, skills, and trajectory refinement.
           </p>
           <table class="concept-table">
             <thead>
@@ -1233,6 +1451,14 @@
             into subgoals and action steps. Tool use allows the model to interact with external systems such as
             search engines, APIs, code interpreters, databases, and software environments.
           </p>
+
+          <h4>Planning</h4>
+          <p>
+            Planning is the ability to infer the steps needed to complete a task even when the user does not specify
+            those steps. In the tutorial's example, the agent sees an environment with a calculator and a database
+            API, receives a babysitting-payment task, and must plan to extract numbers, compute \(12\times 50/60\),
+            format the result, and save it through the API.
+          </p>
           <p>
             Supervised planning data can provide an initial scaffold. The data may include environment information,
             sampled trajectories, trajectory evaluation, and selected demonstrations. RL can then improve the policy
@@ -1243,17 +1469,54 @@
             <figcaption>Planning data can be constructed from environments, sampled trajectories, and trajectory evaluation.</figcaption>
           </figure>
           <p>
+            The important distinction from ordinary SFT is that a plan is judged by its downstream consequences. A
+            locally reasonable subgoal can still lead to failure after several tool calls, while an initially failed
+            trajectory may reveal a useful alternative. RL is useful because it can optimize plans according to
+            execution outcomes rather than only imitate static demonstrations.
+          </p>
+
+          <h4>Tool Use</h4>
+          <p>
             Tool use adds new decisions. The model must choose whether to call a tool, which tool to call, how to
             format the arguments, how to interpret the returned observation, and when to stop. These decisions can
             be optimized with rewards based on task success, execution correctness, or intermediate progress
             <a class="citation" href="#ref-15">[15]</a><a class="citation" href="#ref-16">[16]</a><a class="citation" href="#ref-17">[17]</a>.
           </p>
+          <p>
+            The paper presents tool learning in three levels. Prompt-based tool use gives the model tool
+            descriptions and demonstrations, so it learns an interaction pattern in context. Supervised tool-use
+            data fine-tunes the model on trajectories containing thoughts, actions, observations, and final answers.
+            RL then optimizes choices that imitation alone cannot directly judge, such as whether a tool call was
+            necessary, whether the arguments were valid, whether the observation was used correctly, and whether the
+            cost of using the tool was justified.
+          </p>
+          <table class="concept-table compact">
+            <thead>
+              <tr>
+                <th>Tool-use Stage</th>
+                <th>What It Teaches</th>
+                <th>Main Limitation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Prompt-based tool use</td><td>How to alternate reasoning, action, observation, and answer.</td><td>Depends heavily on in-context ability.</td></tr>
+              <tr><td>Supervised tool-use data</td><td>How to imitate demonstrated tool trajectories.</td><td>Cannot directly optimize task success or tool cost.</td></tr>
+              <tr><td>RL for tool use</td><td>How to choose and execute tools based on feedback.</td><td>Requires reliable environments and rewards.</td></tr>
+            </tbody>
+          </table>
 
           <h3 id="environment-design">6.2 Environment Design and Scaling</h3>
           <p>
             Environments define what an agent can learn. They specify states, available actions, transition rules,
             observations, and success criteria. A useful environment should be challenging enough to teach real
             capabilities, but structured enough to provide reliable feedback.
+          </p>
+          <p>
+            In agentic RL, the environment is not just background context. It determines the action space, exposes
+            observations after each action, and supplies the rewards or verifiers used for learning. For a tool-use
+            task, this may include tool schemas, executable APIs, state changes, error messages, and task-success
+            checks. Poorly designed environments can make the agent learn brittle shortcuts or receive misleading
+            feedback.
           </p>
           <p>
             Manual environment construction is expensive. Therefore, recent work explores synthetic and
@@ -1287,8 +1550,14 @@
             process supervision, step verifiers, or models that evaluate subgoals. The goal is to connect delayed
             success or failure to the decisions that actually caused it <a class="citation" href="#ref-19">[19]</a>.
           </p>
+          <p>
+            The paper separates credit at different levels. Plan-level feedback evaluates whether the initial
+            decomposition is useful. Step-level feedback evaluates individual actions such as tool calls or
+            observation interpretation. Outcome-level feedback evaluates final task success. Combining these signals
+            helps the agent learn not only that a trajectory failed, but which decision should be changed.
+          </p>
 
-          <h3 id="agent-experience">6.4 Experience Learning</h3>
+          <h3 id="agent-experience">6.4 Learning from Agentic Experience</h3>
           <p>
             Agentic systems should learn not only from human demonstrations, but also from their own interaction
             experience. As agents operate in dynamic environments, they collect both successful and failed
@@ -1471,9 +1740,14 @@
           <p class="chapter-number">Section 7</p>
           <h2>Multimodal RL</h2>
           <p>
-            The paper then extends RL beyond text-only LLMs. Multimodal models process and generate information
-            across text, images, video, and audio. Although the model architectures differ, the core RL pattern is
-            similar: sample outputs, evaluate them with rewards, and update the model toward preferred behavior.
+            Section 7 extends RL beyond text-only LLMs. Multimodal models process and generate information across
+            text, images, video, and audio. The chapter separates two cases: multimodal understanding, where the
+            model usually still generates text conditioned on non-textual inputs, and multimodal generation, where
+            the model synthesizes images or other media.
+          </p>
+          <p>
+            Although the architectures differ, the core RL pattern is similar: sample outputs or generation
+            trajectories, evaluate them with rewards, and update the model toward preferred behavior.
           </p>
           <table class="concept-table">
             <thead>
@@ -1497,6 +1771,13 @@
             and hallucination avoidance. This requires reward models that understand both language and visual
             content <a class="citation" href="#ref-21">[21]</a>.
           </p>
+          <p>
+            From the RL perspective, visual language models are close to ordinary LLMs because the output is still
+            usually text. The state now includes both the textual instruction and visual representations from an
+            encoder, while the action remains the next generated token. This means PPO-style or GRPO-style training
+            can be reused with relatively small changes, as long as the reward model can evaluate whether the text
+            is grounded in the image.
+          </p>
           <figure class="paper-figure">
             <img src="assets/figures/fig-visual-rm.png" alt="Diagram showing visual reward model training">
             <figcaption>Visual reward models can be trained through stages that bridge text preference data and visual preference data.</figcaption>
@@ -1505,6 +1786,18 @@
             The paper presents visual reward modeling as a natural extension of RLHF. Preference learning remains
             central, but the evaluated output must be judged against both the instruction and the image. This creates
             new challenges in data collection, model grounding, and reward generalization.
+          </p>
+          <p>
+            Because visual preference data is expensive, the paper describes a multi-stage strategy. First, use
+            large-scale text preference data to pre-train general preference judgment. Second, fine-tune with
+            image-caption preference data to reduce the task gap between general text preference and visual
+            instruction following. Third, fine-tune with smaller visual preference data so the reward model learns
+            the actual modality grounding needed for image-based evaluation.
+          </p>
+          <p>
+            This also explains why multimodal RL is not only an algorithm problem. The policy optimizer may be
+            familiar, but the bottleneck often lies in building a reward model that can judge visual facts,
+            modality-specific errors, and human preferences reliably.
           </p>
 
           <h3 id="multimodal-generation">7.2 Multimodal Generation Models</h3>
@@ -1521,6 +1814,12 @@
             how to reinterpret the generation process as a trajectory so that policy-gradient-style optimization can
             connect the final sample reward back to the model's intermediate generation decisions.
           </p>
+          <p>
+            This is why the section separately discusses diffusion models and flow matching models. They both
+            generate non-text content, but their trajectories are different. Diffusion naturally provides a sequence
+            of denoising states, while flow matching is often deterministic and continuous, so it needs an additional
+            stochastic formulation before online RL can be applied.
+          </p>
 
           <h3 id="diffusion-models">7.2.1 Diffusion Models</h3>
           <p>
@@ -1528,6 +1827,11 @@
             noise, the model repeatedly predicts a cleaner latent until it obtains the final image. Standard
             diffusion training mainly teaches the model to recover the data distribution, but this does not
             necessarily ensure that the final sample satisfies fine-grained human requirements.
+          </p>
+          <p>
+            For example, a model may generate a realistic image while missing a requested object count, color, or
+            layout. RL adds an evaluator on top of the final sample, such as a preference model or vision-language
+            checker, and then optimizes the generation process toward samples that receive higher reward.
           </p>
           <div class="equation">
             \[
@@ -1600,6 +1904,12 @@
             distribution and the target data distribution. Instead of gradually adding and removing noise as in
             diffusion models, flow matching learns a velocity field that transports samples along a continuous
             trajectory.
+          </p>
+          <p>
+            This creates a different RL problem. Diffusion has stochastic denoising transitions that can be treated
+            like policy actions. Standard flow matching often follows a deterministic ODE path once the initial
+            noise is fixed, which limits exploration and makes transition probabilities harder to use in
+            policy-gradient updates.
           </p>
           <div class="equation">
             \[
@@ -1746,14 +2056,6 @@
               learning from their own interactions, feedback, and accumulated experience after deployment.
             </div>
           </div>
-          <aside class="recap-card">
-            <h3>Future Takeaway</h3>
-            <p>
-              Future RL for LLMs is not only about stronger optimization. It also requires better rewards, cheaper
-              sampling, more predictable scaling behavior, and mechanisms for stable long-term learning without
-              catastrophic forgetting.
-            </p>
-          </aside>
         </section>
 
         <section class="chapter" id="systems">
@@ -1898,7 +2200,7 @@
           </ol>
         </section>
 
-        <nav class="reader-footer" aria-label="Introduction footer">
+        <nav class="reader-footer" aria-label="Reader footer">
           <a href="index.html">Project home</a>
           <a href="assets/rl-without-tears.pdf">Full PDF</a>
         </nav>
