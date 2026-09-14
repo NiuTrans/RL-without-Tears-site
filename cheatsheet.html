@@ -55,8 +55,11 @@
           <p class="kicker">Companion material</p>
           <h1>RL Formula Cheat Sheet</h1>
           <p>
-            A compact reference for the core formulas used in RL-based LLM post-training. It summarizes the main
-            objectives and estimators while leaving detailed derivations to the paper.
+            A compact reference for the formulas that appear along the tutorial's main path: LLM next-token
+            modeling, the LLM-as-policy mapping, policy-gradient updates, variance reduction, PPO-style RLHF,
+            reward modeling, direct preference learning, and the extensions to reasoning, agents, and multimodal
+            generation. It is meant for quick lookup after reading the corresponding sections, while the paper
+            remains the source for full derivations.
           </p>
         </section>
 
@@ -119,7 +122,7 @@
 
         <section class="cheat-item" id="sft">
           <p class="chapter-number">Baseline</p>
-          <h2>Supervised Fine-tuning</h2>
+          <h2>Supervised Fine-Tuning</h2>
           <div class="equation">
             \[
               \tilde{\theta}
@@ -133,12 +136,12 @@
             \[
               \log \mathrm{Pr}_{\theta}(\mathbf{y}\mid \mathbf{x})
               =
-              \sum_{i=1}^{n}\log \mathrm{Pr}_{\theta}(y_i\mid \mathbf{x},\mathbf{y}_{&lt;i})
+              \sum_{t=1}^{T}\log \mathrm{Pr}_{\theta}(y_t\mid \mathbf{x},\mathbf{y}_{&lt;t})
             \]
           </div>
           <p class="notation-note">
-            Here, \(\mathbf{x}\) is the input sequence, \(\mathbf{y}=y_1,\ldots,y_n\) is the target output sequence,
-            and \(y_i\) is predicted from the input and previous target tokens.
+            Here, \(\mathbf{x}\) is the input sequence, \(\mathbf{y}=y_1,\ldots,y_T\) is the target output sequence,
+            and \(y_t\) is predicted from the input and previous target tokens.
           </p>
           <p>
             SFT maximizes the likelihood of demonstrated outputs. It provides the initial policy before preference
@@ -450,12 +453,12 @@
             \[
               \mathcal{L}_{\mathrm{RM}}
               =
-              -\log \sigma\left(r_{\phi}(x,y_w)-r_{\phi}(x,y_l)\right)
+              -\log \sigma\left(r_{\phi}(\mathbf{x},\mathbf{y}_w)-r_{\phi}(\mathbf{x},\mathbf{y}_l)\right)
             \]
           </div>
           <p class="notation-note">
-            Here, \(r_{\phi}\) is the reward model, \(y_w\) is the preferred response, and \(y_l\) is the rejected
-            response for the same input.
+            Here, \(r_{\phi}\) is the reward model, \(\mathbf{x}\) is the input, \(\mathbf{y}_w\) is the preferred
+            output sequence, and \(\mathbf{y}_l\) is the rejected output sequence.
           </p>
           <p>
             The reward model learns to assign a higher score to the preferred response than to the rejected
@@ -514,7 +517,7 @@
                 \mathrm{Clip}\left(
                   \frac{\mathrm{Pr}_{\theta}(y_{i,t}\mid\mathbf{x},\mathbf{y}_{i,&lt;t})}
                        {\mathrm{Pr}_{\theta_{\mathrm{ref}}}(y_{i,t}\mid\mathbf{x},\mathbf{y}_{i,&lt;t})}
-                  A_{i,t}^{\mathrm{grpo}}
+                  A_{i,t}^{\mathrm{GRPO}}
                 \right)
                 -
                 \beta \mathrm{Penalty}
@@ -538,8 +541,9 @@
             \]
           </div>
           <p class="notation-note">
-            Here, \(y_w\) and \(y_l\) denote the preferred and dispreferred outputs, \(\theta_{\mathrm{ref}}\) is
-            the reference model, and \(\beta\) controls the strength of the implicit reward ratio.
+            Here, \(\mathbf{y}_w\) and \(\mathbf{y}_l\) denote the preferred and dispreferred output sequences,
+            \(\theta_{\mathrm{ref}}\) is the reference model, and \(\beta\) controls the strength of the implicit
+            reward ratio.
           </p>
           <p>
             DPO optimizes the policy directly from preference pairs, avoiding an explicit pipeline that trains a

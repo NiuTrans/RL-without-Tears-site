@@ -53,7 +53,7 @@
           </div>
           <div class="topic-pills" aria-label="Covered topics">
             <span>RLHF</span>
-            <span>Reward modeling</span>
+            <span>Reward Modeling</span>
             <span>Reasoning RL</span>
             <span>Agentic RL</span>
             <span>Multimodal RL</span>
@@ -63,16 +63,18 @@
         <section class="block" id="abstract">
           <h2>Abstract</h2>
           <p class="lead">
-            RL has become a practical language for modern LLM research: aligning models with preferences,
-            strengthening reasoning, training agents through interaction, and optimizing multimodal systems. This
-            tutorial introduces RL from the perspective of LLMs, using prompts, tokens, rewards, verifiers,
-            preference data, and trajectories as the central objects.
+            Reinforcement learning has become one of the main languages for explaining modern LLM post-training:
+            it turns generated behavior into trajectories, evaluates that behavior with feedback, and updates the
+            model so better behavior becomes more likely. This tutorial introduces RL from the perspective of LLMs,
+            using prompts, tokens, rewards, verifiers, preference data, and interaction histories as the central
+            objects.
           </p>
           <p>
-            The reading path follows the paper's current logic: first establish the LLM and RL foundations, then
-            build a PPO-style RLHF workflow from a concrete LLM training example, then discuss improved rewards,
-            advantage estimation, efficient methods, DPO, and finally the extensions to reasoning, agents, and
-            multimodal models.
+            The paper is organized as a gradual bridge rather than a catalog of methods. It first reviews the LLM
+            and RL notation needed to see an LLM as a policy. It then derives PPO-style RLHF from a concrete
+            training example, explains why rewards, advantages, importance sampling, and reference models are
+            needed, and only then moves to stronger reward modeling, efficient optimization, DPO, reasoning models,
+            agentic systems, and multimodal generation.
           </p>
         </section>
 
@@ -84,56 +86,56 @@
                 <a href="reader.html#introduction">Introduction</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-01-introduction.pdf" aria-label="Download Chapter 1 PDF">PDF</a>
               </div>
-              <p>Motivates why RL has become important for LLM alignment, reasoning, agents, and multimodal models.</p>
+              <p>Explains why LLM training increasingly needs feedback over complete behavior, not only token-level demonstrations.</p>
             </li>
             <li>
               <div class="chapter-title-row">
                 <a href="reader.html#preliminaries">Preliminary: LLMs and RL</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-02-preliminary.pdf" aria-label="Download Chapter 2 PDF">PDF</a>
               </div>
-              <p>Reviews autoregressive LLMs, pre-training, prompting, SFT, inference, MDPs, and the mapping between LLM generation and RL.</p>
+              <p>Builds the shared notation: autoregressive generation on the LLM side, MDPs and trajectories on the RL side, and the mapping between them.</p>
             </li>
             <li>
               <div class="chapter-title-row">
                 <a href="reader.html#rl-training">Understanding RL in LLM Training</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-03-understanding-rl-in-llm-training.pdf" aria-label="Download Chapter 3 PDF">PDF</a>
               </div>
-              <p>Uses a homework-assistant example to derive policy gradient, temporal decomposition, variance reduction, importance sampling, PPO, reward models, and the complete RLHF workflow.</p>
+              <p>Starts from a homework-assistant example and derives the PPO-style RLHF workflow step by step: policy gradient, credit assignment, advantages, importance sampling, PPO, and reward models.</p>
             </li>
             <li>
               <div class="chapter-title-row">
                 <a href="reader.html#improved-rl">Improved RL for LLMs</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-04-improved-rl-for-llms.pdf" aria-label="Download Chapter 4 PDF">PDF</a>
               </div>
-              <p>Addresses the main pressure points after basic PPO: reward quality, reward sparsity, reward generalization, advantage estimation, efficiency, and direct preference optimization.</p>
+              <p>Revisits the basic workflow and asks what must improve in practice: reward quality, reward sparsity, reward generalization, advantage estimation, training efficiency, and direct preference optimization.</p>
             </li>
             <li>
               <div class="chapter-title-row">
                 <a href="reader.html#reasoning">RL for Reasoning</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-05-rl-for-llm-reasoning.pdf" aria-label="Download Chapter 5 PDF">PDF</a>
               </div>
-              <p>Connects test-time scaling, process verification, MCTS, iterative RL, large-scale RL, and on-policy distillation for reasoning models.</p>
+              <p>Shows how verifiable reasoning turns sampling and search into training signals through Best-of-N, process verification, MCTS, iterative RL, large-scale RL, and on-policy distillation.</p>
             </li>
             <li>
               <div class="chapter-title-row">
                 <a href="reader.html#agents">Agentic RL</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-06-agentic-rl.pdf" aria-label="Download Chapter 6 PDF">PDF</a>
               </div>
-              <p>Studies how RL helps LLM agents learn planning, tool use, environment interaction, credit assignment, memory, skills, and trajectory refinement.</p>
+              <p>Extends the same feedback loop to interactive agents, where planning, tool use, environments, credit assignment, memory, skills, and refinement all shape long trajectories.</p>
             </li>
             <li>
               <div class="chapter-title-row">
                 <a href="reader.html#multimodal">Multimodal RL</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-07-multimodal-rl.pdf" aria-label="Download Chapter 7 PDF">PDF</a>
               </div>
-              <p>Introduces RL for multimodal understanding, visual reward models, diffusion generation, and flow matching generation.</p>
+              <p>Moves beyond text-only policies by discussing visual reward models for understanding and trajectory-style RL for diffusion and flow matching generation.</p>
             </li>
             <li>
               <div class="chapter-title-row">
                 <a href="reader.html#conclusion">Conclusions and Future Directions</a>
                 <a class="chapter-pdf" href="assets/chapters/chapter-08-conclusions-and-future-directions.pdf" aria-label="Download Chapter 8 PDF">PDF</a>
               </div>
-              <p>Summarizes the paper and highlights RL for pre-training, efficient training, scaling limits, and continual self-evolving RL.</p>
+              <p>Returns to the big picture and highlights open directions: RL for pre-training, cheaper RL, scaling-limit prediction, and continual self-evolving models.</p>
             </li>
             <li id="chapters-appendix">
               <div class="chapter-title-row">
@@ -158,7 +160,7 @@
             </a>
             <a class="material" href="glossary.html">
               <span>Glossary</span>
-              <p>Short definitions for RL, reward modeling, reasoning, and agent terminology.</p>
+              <p>Unified abbreviations, notation, and short definitions for RL, reward modeling, reasoning, and agent terminology.</p>
             </a>
             <a class="material" href="reader.html#systems">
               <span>Systems & Datasets</span>
